@@ -1,17 +1,20 @@
+# debugging
 nums = [[int(z) for z in y] for y in [x.replace('\n', '')
-                                      for x in open('./input/day3.txt').readlines()]]
+                                      for x in open('./input/day3.txt')
+                                      .readlines()]]
 
-###Part 1:###
-l = len(nums)
-h = l//2
+# Part 1:
+length = len(nums)
+h = length//2
 w = len(nums[0])
-sums = [1 if sum([nums[j][i] for j in range(l)]) > h else 0 for i in range(w)]
+sums = [1 if sum([nums[j][i] for j in range(length)])
+        > h else 0 for i in range(w)]
 gamma = int(''.join(str(y) for y in sums), 2)
 epsilon = int(''.join(str(y) for y in [0 if x == 1 else 1 for x in sums]), 2)
 print(gamma*epsilon)
 
-###Part 2:###
 
+# Part 2:
 
 def findnum(inputnums, mode):
     nums = inputnums.copy()
