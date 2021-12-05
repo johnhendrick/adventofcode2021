@@ -1,0 +1,12 @@
+README.md
+setup.py
+advent-code/__init__.py
+advent-code/day1.py
+advent-code/day2.py
+advent-code/day3-v2.py
+advent-code/day3.py
+advent-code/day4.py
+advent_of_code.egg-info/PKG-INFO
+advent_of_code.egg-info/SOURCES.txt
+advent_of_code.egg-info/dependency_links.txt
+advent_of_code.egg-info/top_level.txt
