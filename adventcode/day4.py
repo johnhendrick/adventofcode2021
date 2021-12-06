@@ -1,11 +1,7 @@
 import numpy as np
+from utils import read_file
 
 file_path = './input/day4.txt'
-
-
-def read_file(file_path):
-    with open(file_path) as f:
-        return f.read()
 
 
 def parse_file(file_content):

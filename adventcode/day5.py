@@ -1,12 +1,8 @@
 import numpy as np
 from itertools import repeat
+from utils import read_file
 
 file_path = './input/day5.txt'
-
-
-def read_file(file_path=file_path):
-    with open(file_path) as f:
-        return f.read()
 
 
 def parse_file(file_content):
@@ -65,7 +61,7 @@ def filter_h_v(coor_pair):
         return False
 
 
-coors = (parse_file(read_file()))
+coors = (parse_file(read_file(file_path)))
 coors = [coor_pair for coor_pair in coors if filter_h_v(coor_pair)]
 
 all_steps = []
@@ -83,7 +79,7 @@ visits = visits.T
 print(np.count_nonzero(visits > 1))
 
 # part2
-coors = (parse_file(read_file()))
+coors = (parse_file(read_file(file_path)))
 coors_m = [coor_pair for coor_pair in coors if filter_h_v(coor_pair)]
 coors_diag = [
     coor_pair for coor_pair in coors if filter_h_v(coor_pair) is False]
