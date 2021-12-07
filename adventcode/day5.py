@@ -1,6 +1,6 @@
 import numpy as np
 from itertools import repeat
-from utils import read_file
+from adventcode.utils import read_file
 
 file_path = './input/day5.txt'
 

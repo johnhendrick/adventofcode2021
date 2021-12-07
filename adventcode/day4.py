@@ -1,5 +1,5 @@
 import numpy as np
-from utils import read_file
+from adventcode.utils import read_file
 
 file_path = './input/day4.txt'
 
