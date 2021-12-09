@@ -13,7 +13,9 @@ adventcode/day4.py
 adventcode/day5.py
 adventcode/day6.py
 adventcode/day7.py
+adventcode/day8.py
 adventcode/utils.py
 tests/__init__.py
 tests/day4_test.py
 tests/day5_test.py
+tests/day8_test.py

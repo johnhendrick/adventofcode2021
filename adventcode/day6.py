@@ -1,5 +1,5 @@
 import pandas as pd
-from utils import read_file
+from adventcode.utils import read_file
 
 file_path = './input/day6.txt'
 
