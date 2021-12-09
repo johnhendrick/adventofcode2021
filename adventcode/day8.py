@@ -1,6 +1,5 @@
 import numpy as np
 from adventcode.utils import read_file
-import copy
 
 file_path = './input/day8.txt'
 
@@ -30,8 +29,7 @@ print(np.isin(np_len, list(l_mapping.values())).sum())
 
 
 # part 2
-#    a'
-#    _
+#     _a'
 #  f'|_| b'  inside: g'
 #  e'|_| c'
 #    d'
