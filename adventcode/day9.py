@@ -1,6 +1,7 @@
 from adventcode.utils import read_file
+from copy import deepcopy
 
-file_path = './input/day9.txt'
+file_path = './input/day9sample.txt'
 
 
 def parse_file(file_content=read_file(file_path)):
@@ -37,11 +38,11 @@ for i in range(xmax):
 print(sum(list(map(lambda x: x+1, collect))))
 
 # part 2
-explored_hmap = hmap.copy()
+explored_hmap = deepcopy(hmap)
 
 
 def traverse(x, y):
-    if get_value(hmap, x, y) >= 9:
+    if get_value(explored_hmap, x, y) >= 9:
         # print('hit an edge')
         return 0
     else:
@@ -59,3 +60,4 @@ for loc in min_locs:
     sizes.append(traverse(loc[0], loc[1]))
 top_3 = sorted(sizes)[-3:]
 print(top_3[0] * top_3[1] * top_3[2])
+print(hmap)
