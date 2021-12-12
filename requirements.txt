@@ -1,4 +1,3 @@
--e git+https://github.com/johnhendrick/adventofcode2021.git@5bf2aef686d7d58a5b5fb2575ffb02282e8c0b1a#egg=advent_of_code
 appnope==0.1.2
 attrs==21.2.0
 autopep8==1.6.0
@@ -15,7 +14,6 @@ jupyter-client==7.1.0
 jupyter-core==4.9.1
 matplotlib-inline==0.1.3
 mccabe==0.6.1
--e git+https://github.com/johnhendrick/adventofcode2021.git@5bf2aef686d7d58a5b5fb2575ffb02282e8c0b1a#egg=myproject
 nest-asyncio==1.5.4
 numpy==1.21.4
 packaging==21.3

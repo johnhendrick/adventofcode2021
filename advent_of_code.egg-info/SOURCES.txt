@@ -6,6 +6,8 @@ advent_of_code.egg-info/dependency_links.txt
 advent_of_code.egg-info/top_level.txt
 adventcode/__init__.py
 adventcode/day1.py
+adventcode/day10.py
+adventcode/day11.py
 adventcode/day2.py
 adventcode/day3-v2.py
 adventcode/day3.py
@@ -14,6 +16,7 @@ adventcode/day5.py
 adventcode/day6.py
 adventcode/day7.py
 adventcode/day8.py
+adventcode/day9.py
 adventcode/utils.py
 tests/__init__.py
 tests/day4_test.py

@@ -1,12 +1,12 @@
-Metadata-Version: 1.0
+Metadata-Version: 2.1
 Name: advent-of-code
 Version: 0.1.dev0
 Summary: UNKNOWN
 Home-page: UNKNOWN
-Author: UNKNOWN
-Author-email: UNKNOWN
 License: UNKNOWN
-Description: ## Advent of Code 2021
-        
-        A winter musing of https://adventofcode.com/2021/about challenges
 Platform: UNKNOWN
+
+## Advent of Code 2021
+
+A winter musing of https://adventofcode.com/2021/about challenges
+
