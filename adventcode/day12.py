@@ -1,4 +1,6 @@
 from adventcode.utils import read_file
+from collections import Counter
+import numpy as np
 
 file_path = './input/day12.txt'
 
@@ -23,10 +25,25 @@ links, rooms = parse_file()
 all_paths = []
 
 
-def traverse(path=[], step='start', blocked=[]):
+def clean_blocked(lower_visted, max_):
+    counts = Counter(lower_visted)
+    exclude = ['start', 'end']
+    output = []
+
+    max_visit_hit = np.any(np.array(list(counts.values())) == max_)
+
+    for ele in lower_visted:
+        if ((ele in exclude) or max_visit_hit) and ele.islower():
+            output.append(ele)
+
+    return output
+
+
+def traverse(path=[], step='start', visited=[], blocked=[], max_=1):
     path = path + [step]
     if step.islower():
-        blocked = blocked + [step]
+        visited = visited + [step]
+        blocked = clean_blocked(visited, max_)
     next_rooms = [room for room in links.get(step) if room not in blocked]
 
     if step == 'end':
@@ -37,12 +54,18 @@ def traverse(path=[], step='start', blocked=[]):
     else:
         count = 0
         for next_ in next_rooms:
-            count += traverse(path=path, step=next_, blocked=blocked)
+            count += traverse(path=path, step=next_,
+                              visited=visited, blocked=blocked, max_=max_)
 
         return count
 
 
 unique_paths = traverse()
 
-print(all_paths)
+# print(all_paths)
 print(unique_paths)
+
+#  part 2
+all_paths = []
+unique_paths_v2 = traverse(max_=2)
+print(unique_paths_v2)
