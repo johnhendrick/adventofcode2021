@@ -1,6 +1,6 @@
 from adventcode.utils import read_file
 
-file_path = './input/day12sample.txt'
+file_path = './input/day12.txt'
 
 
 def parse_file(file_content=read_file(file_path)):
@@ -15,31 +15,34 @@ def parse_file(file_content=read_file(file_path)):
     for pair in pairs:
         rooms[pair[0]].append(pair[1])
         rooms[pair[1]].append(pair[0])
-        
+
     return rooms, list(rooms.keys())
 
 
 links, rooms = parse_file()
-print(links)
-print(rooms)
-
-# class CaveRooms:
-#     def __init__(self, room, linked):
-#         self.loc = room
-#         self.linked = list()
+all_paths = []
 
 
-def traverse(path=['start'], banned=['start']):
-    next_rooms = links.get(path[-1])
-    if set(next_rooms) == set(banned):
-        return
-    elif path[-1] == 'end':
-        return 
+def traverse(path=[], step='start', blocked=[]):
+    path = path + [step]
+    if step.islower():
+        blocked = blocked + [step]
+    next_rooms = [room for room in links.get(step) if room not in blocked]
+
+    if step == 'end':
+        all_paths.append(path)
+        return 1
+    elif len(next_rooms) == 0:
+        return 0
     else:
-        for room in next_rooms:
+        count = 0
+        for next_ in next_rooms:
+            count += traverse(path=path, step=next_, blocked=blocked)
 
-            traverse(path=path.append(room), banned)
-
-            
+        return count
 
 
+unique_paths = traverse()
+
+print(all_paths)
+print(unique_paths)
