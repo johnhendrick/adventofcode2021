@@ -28,8 +28,7 @@ def get_coor(df=df, aim=True):
     return h_pos * depth
 
 
-# print(get_coor(aim=False))
+print(get_coor(aim=False))
 
 #  part 2
-
 print(get_coor())
