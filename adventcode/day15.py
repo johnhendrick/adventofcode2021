@@ -1,4 +1,6 @@
 from adventcode.utils import read_file
+import numpy as np
+import heapq
 
 file_path = './input/day15.txt'
 
@@ -31,18 +33,24 @@ def dijkstra(nodes, edges, source=(0, 0)):
     for (u, v), w_uv in edges.items():
         adjacent[u][v] = w_uv
 
-    temp = [v for v in nodes]
-    while len(temp) > 0:
-        upper = {v: path_lengths[v] for v in temp}
-        u = min(upper, key=upper.get)
-        temp.remove(u)
+    # temp = [v for v in nodes]
+    pq = [(0, source)]
 
-        for v, w_uv in adjacent[u].items():
-            path_lengths[v] = min(path_lengths[v], path_lengths[u] + w_uv)
+    while len(pq) > 0:
+        curr_d, curr_v = heapq.heappop(pq)
+
+        if curr_d > path_lengths[curr_v]:
+            continue
+
+        for n, w in adjacent[curr_v].items():
+            distance = curr_d + w
+            if distance < path_lengths[n]:
+                path_lengths[n] = distance
+                heapq.heappush(pq, (distance, n))
     return path_lengths
 
 
-def surround(i, j):
+def surround(i, j, cave=cave):
     def within(a, z):
         return a in range(z)
 
@@ -63,5 +71,34 @@ for i in range(x):
         edges.update(surround(i, j))
 
 print(dijkstra(nodes, edges).get((x-1, y-1)))
-# print(nodes)
-# print(edges)
+
+# part 2
+
+
+def increment(ele, i):
+    return (ele+i) % 9 if ((ele+i) % 9) != 0 else 9
+
+
+def expand(arr):
+    arr = np.array([[int(ele) for ele in row] for row in arr])
+    arr = np.concatenate((arr, np.vectorize(increment)(arr, 1),
+                          np.vectorize(increment)(arr, 2),
+                          np.vectorize(increment)(arr, 3),
+                          np.vectorize(increment)(arr, 4)), axis=1)
+    arr = np.concatenate((arr, np.vectorize(increment)(arr, 1),
+                          np.vectorize(increment)(arr, 2),
+                          np.vectorize(increment)(arr, 3),
+                          np.vectorize(increment)(arr, 4)))
+    return arr.tolist()
+
+
+cave2 = expand(parse_file())
+x, y = len(cave2[0]), len(cave2)
+nodes = []
+edges = {}
+for i in range(x):
+    for j in range(y):
+        nodes.append((i, j))
+        edges.update(surround(i, j, cave=cave2))
+
+print(dijkstra(nodes, edges).get((x-1, y-1)))
