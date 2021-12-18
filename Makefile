@@ -4,7 +4,7 @@ testing:
 	pytest test
 
 build-dev:
-  python -m pip install -e .
+	python -m pip install -e .
 
 build:
 	python setup.py sdist bdist_wheel
