@@ -1,11 +1,11 @@
-from adventcode.utils import read_file
+# from adventcode.utils import read_file
 import math
 from copy import deepcopy
 
 file_path = './input/day18.txt'
 
 
-def parse_file(file_content=read_file(file_path)):
+def parse_file(file_content):
     rows = file_content.split('\n')
     data = [eval(row) for row in rows]
     return data
@@ -40,40 +40,67 @@ def traverse_recurse(a, most_left=True, update=-99):
         return a
 
 
-def _explode(a, depth=0):
-    to_explode = [None, None]
+def _explode(a, depth=0, to_explode=[None, None], indexes=[], exploded_once=False, prev={}):
+
     flag = False
 
     if all([isinstance(ele, int) for ele in a]) and (depth == 4):
-        to_explode = deepcopy(a)
-        return a, to_explode, True
+        if exploded_once:
+            return a, to_explode, False, exploded_once
+        else:
+            to_explode = deepcopy(a)
+            return a, to_explode, True, True
 
-    for i, ele in enumerate(a):
-        if isinstance(ele, list):
-            ele, to_explode, flag = _explode(ele, depth=depth+1)
-            if flag:
-                a[i] = 0
-                flag = False
+    else:
+        for i, ele in enumerate(a):
+            indexes.append(i)
+
+            if isinstance(ele, list):
+                ele, to_explode, flag, exploded_once = _explode(
+                    ele, depth=depth+1, to_explode=to_explode, indexes=indexes, exploded_once=exploded_once, prev=prev)
+                if flag:
+                    a[i] = 0
+                    flag = False
+                    exploded_once = True
+                    # print('explode')
             if (to_explode[0] is not None) or (to_explode[1] is not None):
                 # peek left
                 if to_explode[0] and (i-1 in range(len(a))):
                     if isinstance(a[i-1], list):
                         _ = traverse_recurse(
                             a[i-1], most_left=False, update=to_explode[0])
-                    else:
+                    elif isinstance(a[i-1], int):
                         a[i-1] += to_explode[0]
-                        to_explode[0] = None
+                    to_explode[0] = None
+                elif to_explode[0] and all([ele == 0 for ele in indexes]):
+                    print('most_left ')
+                    to_explode[0] = None
+                elif to_explode[0] and all([ele == 0 for ele in indexes]) is False:
+                    prev_ele = None
+                    check = depth-1
+                    while prev_ele is None and depth >= 0:
+                        prev_ele = prev.get(check)
+                        check -= 1
+                    val = prev_ele[0][prev_ele[1]]
+                    print('prev ele found, ', val)
+                    if type(val) is list:
+                        _ = traverse_recurse(
+                            val, most_left=False, update=to_explode[0])
+                    elif type(val) is int:
+                        prev_ele[0][prev_ele[1]] += to_explode[0]
+                    to_explode[0] = None
 
                 # peek right
                 if to_explode[1] and (i+1 in range(len(a))):
                     if isinstance(a[i+1], list):
                         _ = traverse_recurse(
                             a[i+1], most_left=True, update=to_explode[1])
-                    else:
-                        a[i+1] += to_explode[1]
-                        to_explode[1] = None
 
-    return a, to_explode, flag
+                    elif isinstance(a[i+1], int):
+                        a[i+1] += to_explode[1]
+                    to_explode[1] = None
+            prev[depth] = [a, i]
+        return a, to_explode, flag, exploded_once
 
 
 def removeElements(array, remove_elements):
@@ -107,8 +134,12 @@ def nested_clean(L):
 
 
 def explode(a):
-    b, _, _ = _explode(a)
-    return b
+    prev = None
+    curr = a
+    while prev != curr:
+        prev = deepcopy(curr)
+        curr, _, _, _ = _explode(curr)
+    return curr
 
 
 first = [True]
@@ -129,13 +160,12 @@ def split_(L):
 
 def reduce_(data):
     prev = None
-    curr = None
     for i, row in enumerate(data):
-        curr = add(curr, row)
+        curr = add(prev, row)
         print('post add:\n', curr)
         while prev != curr:
             prev = deepcopy(curr)
-            curr = explode(curr)
+            curr = explode(deepcopy(curr))
             print('post explode:\n', curr)
             _ = split_(curr)
             print('post split:\n', curr)
