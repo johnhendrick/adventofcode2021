@@ -1,6 +1,8 @@
-# from adventcode.utils import read_file
+from adventcode.utils import read_file
 import math
 from copy import deepcopy
+
+# 🎄🎄🎄🎄 🎄🎄🎄🎄
 
 file_path = './input/day18.txt'
 
@@ -40,7 +42,12 @@ def traverse_recurse(a, most_left=True, update=-99):
         return a
 
 
-def _explode(a, depth=0, to_explode=[None, None], indexes=[], exploded_once=False, prev={}):
+def _explode(a,
+             depth=0,
+             to_explode=[None, None],
+             indexes=[],
+             exploded_once=False,
+             prev={}):
 
     flag = False
 
@@ -73,7 +80,7 @@ def _explode(a, depth=0, to_explode=[None, None], indexes=[], exploded_once=Fals
                         a[i-1] += to_explode[0]
                     to_explode[0] = None
                 elif to_explode[0] and all([ele == 0 for ele in indexes]):
-                    print('most_left ')
+                    # print('most_left ')
                     to_explode[0] = None
                 elif to_explode[0] and all([ele == 0 for ele in indexes]) is False:
                     prev_ele = None
@@ -82,7 +89,7 @@ def _explode(a, depth=0, to_explode=[None, None], indexes=[], exploded_once=Fals
                         prev_ele = prev.get(check)
                         check -= 1
                     val = prev_ele[0][prev_ele[1]]
-                    print('prev ele found, ', val)
+                    # print('prev ele found, ', val)
                     if type(val) is list:
                         _ = traverse_recurse(
                             val, most_left=False, update=to_explode[0])
@@ -100,37 +107,8 @@ def _explode(a, depth=0, to_explode=[None, None], indexes=[], exploded_once=Fals
                         a[i+1] += to_explode[1]
                     to_explode[1] = None
             prev[depth] = [a, i]
+            prev = {k: v for k, v in prev.items() if k <= depth}
         return a, to_explode, flag, exploded_once
-
-
-def removeElements(array, remove_elements):
-    out = []
-    for element in array:
-        if isinstance(element, list):
-            if None not in element:
-                out.append(removeElements(element, remove_elements))
-            else:
-                print('beep')
-                out.append(0)
-        else:
-            if element not in remove_elements:
-                out.append(element)
-
-    return out
-
-
-def nested_clean(L):
-    """Recursively remove list of length 1
-
-    Args:
-        L (list): list to be cleaned
-    """
-    for i, element in enumerate(L):
-        if type(element) is list:
-            if len(element) == 1:
-                L[i] = 0
-            else:
-                nested_clean(element)
 
 
 def explode(a):
@@ -140,9 +118,6 @@ def explode(a):
         prev = deepcopy(curr)
         curr, _, _, _ = _explode(curr)
     return curr
-
-
-first = [True]
 
 
 def split_(L):
@@ -162,13 +137,13 @@ def reduce_(data):
     prev = None
     for i, row in enumerate(data):
         curr = add(prev, row)
-        print('post add:\n', curr)
+        # print('post add:\n', curr)
         while prev != curr:
             prev = deepcopy(curr)
             curr = explode(deepcopy(curr))
-            print('post explode:\n', curr)
+            # print('post explode:\n', curr)
             _ = split_(curr)
-            print('post split:\n', curr)
+            # print('post split:\n', curr)
     return curr
 
 
@@ -184,4 +159,6 @@ def magnitude(a, total=0):
 
     return total
 
-# reduce_
+
+sum_output = reduce_(parse_file(file_content=read_file(file_path)))
+print(magnitude(sum_output))
