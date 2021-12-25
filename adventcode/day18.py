@@ -64,12 +64,16 @@ def _explode(a,
 
             if isinstance(ele, list):
                 ele, to_explode, flag, exploded_once = _explode(
-                    ele, depth=depth+1, to_explode=to_explode, indexes=indexes, exploded_once=exploded_once, prev=prev)
+                    ele,
+                    depth=depth+1,
+                    to_explode=to_explode,
+                    indexes=indexes,
+                    exploded_once=exploded_once, prev=prev)
                 if flag:
                     a[i] = 0
                     flag = False
                     exploded_once = True
-                    # print('explode')
+
             if (to_explode[0] is not None) or (to_explode[1] is not None):
                 # peek left
                 if to_explode[0] and (i-1 in range(len(a))):
@@ -80,16 +84,16 @@ def _explode(a,
                         a[i-1] += to_explode[0]
                     to_explode[0] = None
                 elif to_explode[0] and all([ele == 0 for ele in indexes]):
-                    # print('most_left ')
                     to_explode[0] = None
-                elif to_explode[0] and all([ele == 0 for ele in indexes]) is False:
+                elif (to_explode[0]
+                      and all([ele == 0 for ele in indexes]) is False):
                     prev_ele = None
                     check = depth-1
                     while prev_ele is None and depth >= 0:
                         prev_ele = prev.get(check)
                         check -= 1
                     val = prev_ele[0][prev_ele[1]]
-                    # print('prev ele found, ', val)
+
                     if type(val) is list:
                         _ = traverse_recurse(
                             val, most_left=False, update=to_explode[0])
@@ -130,20 +134,16 @@ def split_(L):
             if element > 9:
                 L[i] = [element//2, math.ceil(element/2)]
                 return True
-                # split_(L[i])
 
 
 def reduce_(data):
     prev = None
     for i, row in enumerate(data):
         curr = add(prev, row)
-        # print('post add:\n', curr)
         while prev != curr:
             prev = deepcopy(curr)
             curr = explode(deepcopy(curr))
-            # print('post explode:\n', curr)
             _ = split_(curr)
-            # print('post split:\n', curr)
     return curr
 
 
