@@ -174,10 +174,6 @@ def magnitude(a, total=0):
 
 
 if __name__ == "__main__":
-    # part 1
-    sum_output = reduce_(parse_file(file_content=read_file(file_path)))
-    print(magnitude(sum_output))
-
     # part 2
     all_sn = parse_file(file_content=read_file(file_path))
     size = len(all_sn)
@@ -190,6 +186,10 @@ if __name__ == "__main__":
     def run(pair):
         return magnitude(reduce_pair(pair))
 
-    part2 = Parallel(n_jobs=6)(delayed(run)(pair)
-                               for pair in tqdm(pairs))
-    print(max(part2))
+    results = Parallel(n_jobs=-1)(delayed(run)(pair)
+                                  for pair in tqdm(pairs))
+    print('part 2\n ', max(results))
+
+    # part 1
+    sum_output = reduce_(parse_file(file_content=read_file(file_path)))
+    print('part 1\n ', magnitude(sum_output))
