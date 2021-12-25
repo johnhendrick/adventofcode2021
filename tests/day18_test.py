@@ -1,6 +1,7 @@
 import pytest
 from adventcode.day18 import (split_, magnitude, explode, add,
-                              traverse_recurse, parse_file, reduce_)
+                              traverse_recurse, parse_file,
+                              reduce_)
 
 
 @pytest.mark.parametrize("data, expected", [

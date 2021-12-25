@@ -1,6 +1,8 @@
 from adventcode.utils import read_file
 import math
+from tqdm import tqdm
 from copy import deepcopy
+from joblib import Parallel, delayed
 
 # 🎄🎄🎄🎄 🎄🎄🎄🎄
 
@@ -50,6 +52,7 @@ def _explode(a,
              prev={}):
 
     flag = False
+    done = all([v is None for v in to_explode]) and exploded_once
 
     if all([isinstance(ele, int) for ele in a]) and (depth == 4):
         if exploded_once:
@@ -58,7 +61,7 @@ def _explode(a,
             to_explode = deepcopy(a)
             return a, to_explode, True, True
 
-    else:
+    elif done is False:
         for i, ele in enumerate(a):
             indexes.append(i)
 
@@ -112,7 +115,7 @@ def _explode(a,
                     to_explode[1] = None
             prev[depth] = [a, i]
             prev = {k: v for k, v in prev.items() if k <= depth}
-        return a, to_explode, flag, exploded_once
+    return a, to_explode, flag, exploded_once
 
 
 def explode(a):
@@ -138,12 +141,22 @@ def split_(L):
 
 def reduce_(data):
     prev = None
-    for i, row in enumerate(data):
+    for row in tqdm(data):
         curr = add(prev, row)
         while prev != curr:
             prev = deepcopy(curr)
             curr = explode(deepcopy(curr))
             _ = split_(curr)
+    return curr
+
+
+def reduce_pair(pair):
+    prev = None
+    curr = add(pair[0], pair[1])
+    while prev != curr:
+        prev = deepcopy(curr)
+        curr = explode(deepcopy(curr))
+        _ = split_(curr)
     return curr
 
 
@@ -160,5 +173,23 @@ def magnitude(a, total=0):
     return total
 
 
-sum_output = reduce_(parse_file(file_content=read_file(file_path)))
-print(magnitude(sum_output))
+if __name__ == "__main__":
+    # part 1
+    sum_output = reduce_(parse_file(file_content=read_file(file_path)))
+    print(magnitude(sum_output))
+
+    # part 2
+    all_sn = parse_file(file_content=read_file(file_path))
+    size = len(all_sn)
+    pairs = []
+    for i in range(size):
+        for j in range(size):
+            if i != j:
+                pairs.append(add(all_sn[i], all_sn[j]))
+
+    def run(pair):
+        return magnitude(reduce_pair(pair))
+
+    part2 = Parallel(n_jobs=6)(delayed(run)(pair)
+                               for pair in tqdm(pairs))
+    print(max(part2))
